@@ -47,6 +47,10 @@ class Firebase {
   messages = () => this.db.ref('messages');
 
   serverTime = () => this.db.ref('/.info/serverTimeOffset');
+
+  roomClosingTime = () => this.db.ref('closingTime');
+
+  rooms = () => this.db.ref('rooms');
 }
 
 export default Firebase;

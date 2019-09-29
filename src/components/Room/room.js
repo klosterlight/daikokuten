@@ -4,8 +4,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Header from '../Common';
 import { Messages } from './index';
+import { CountdownTimer } from '../Common';
 import { CurrentUser } from '../Common';
 import { withFirebase } from '../Firebase';
+import CreateRoom from '../Admin';
 import moment from "moment";
 
 class RoomBase extends React.Component {
@@ -14,17 +16,25 @@ class RoomBase extends React.Component {
     this.state = {
       loading: false,
       messages: [],
-      text: ''
+      text: '',
+      tickTimer: 0
     };
   }
+
   componentDidMount() {
     const currentUser = CurrentUser();
+    const self = this;
     if(currentUser) {
       this.setState({
         displayName: currentUser.displayName
       });
     }
     this.setState({ loading: true });
+    this.interval = setInterval(() => {
+      this.setState({
+        tickTimer: this.state.tickTimer + 1
+      });
+    }, 1000);
     this.props.firebase.messages().on('value', snapshot => {
       const messageObject = snapshot.val();
       if(messageObject) {
@@ -66,9 +76,11 @@ class RoomBase extends React.Component {
     const { text, messages } = this.state;
     return(
       <Container>
-        <Header />
+        <Header tickTimer={this.state.tickTimer}/>
         <Row xs={12}>
           <Col xs={8}>
+            <CountdownTimer tickTimer={this.state.tickTimer} />
+            <CreateRoom />
           </Col>
           <Col xs={4}>
             <Row>
