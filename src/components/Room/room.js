@@ -6,6 +6,7 @@ import Header from '../Common';
 import { Messages } from './index';
 import { CurrentUser } from '../Common';
 import { withFirebase } from '../Firebase';
+import moment from "moment";
 
 class RoomBase extends React.Component {
   constructor(props) {
@@ -23,17 +24,20 @@ class RoomBase extends React.Component {
         displayName: currentUser.displayName
       });
     }
-    this.props.firebase.messages().on('child_added', snapshot => {
-      const snapshotValue = snapshot.val();
-      const messageObject = {
-        text: snapshotValue.text,
-        displayName: snapshotValue.displayName,
-        uid: snapshot.key
-      };
-      // convert messages list from snapshot
-      this.setState(prevState => ({
-        messages: [...prevState.messages, messageObject]
-      }));
+    this.setState({ loading: true });
+    this.props.firebase.messages().on('value', snapshot => {
+      const messageObject = snapshot.val();
+      if(messageObject) {
+        const messageList = Object.keys(messageObject).map(key => ({
+          ...messageObject[key],
+          uid: key,
+          sentAt: moment(messageObject[key].timestamp).format("DD MM YYYY hh:mm:ss")
+        }));
+        this.setState({
+          messages: messageList,
+          loading: false,
+        });
+      }
     });
   }
   componentWillUnmount() {
@@ -47,7 +51,8 @@ class RoomBase extends React.Component {
   onCreateMessage = event => {
     this.props.firebase.messages().push({
       text: this.state.text,
-      displayName: this.state.displayName
+      displayName: this.state.displayName,
+      timestamp: this.props.firebase.timeStamp
     }).then(e => {
       console.log(e);
     }).catch(e => {

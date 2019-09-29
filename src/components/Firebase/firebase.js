@@ -19,6 +19,7 @@ class Firebase {
 
     this.auth = app.auth();
     this.db = app.database();
+    this.timeStamp = app.database.ServerValue.TIMESTAMP;
     this.signInOptions = [
       app.auth.EmailAuthProvider.PROVIDER_ID
       // TODO: ADD Anonymous user
@@ -44,6 +45,8 @@ class Firebase {
   }
 
   messages = () => this.db.ref('messages');
+
+  // timeStamp = () => this.db.ServerValue.TIMESTAMP;
 }
 
 export default Firebase;

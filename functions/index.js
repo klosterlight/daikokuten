@@ -15,16 +15,3 @@ const admin = require('firebase-admin');
 //   const snapshot = await admin.database().ref('/messages').push({original: original});
 //   res.redirect(303, snapshot.ref.toString());
 // });
-
-functions.database.ref('/messages').onCreate((snapshot, context) => {
-  const original = snapshot.val();
-  console.log('AYAYAYAYA');
-  console.log(original);
-  const uppercase = original.toUpperCase();
-
-  admin.database.ref('/elfish').push({
-    caca: 'asdf'
-  });
-
-  return snapshot.ref.parent.child('uppercase').set(uppercase);
-});
