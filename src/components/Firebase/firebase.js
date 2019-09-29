@@ -46,7 +46,7 @@ class Firebase {
 
   messages = () => this.db.ref('messages');
 
-  // timeStamp = () => this.db.ServerValue.TIMESTAMP;
+  serverTime = () => this.db.ref('/.info/serverTimeOffset');
 }
 
 export default Firebase;

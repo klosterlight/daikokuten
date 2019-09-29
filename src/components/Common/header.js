@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { withFirebase } from '../Firebase';
 import { withRouter } from "react-router-dom";
 import * as ROUTES from '../../constants/routes';
+import Timer from './timer';
 
 class HeaderForm extends React.Component {
   constructor(props) {
@@ -24,7 +25,6 @@ class HeaderForm extends React.Component {
   signOut = () => {
     this.props.firebase.signOut();
     this.props.history.push(ROUTES.LOGIN);
-    console.log('exiting');
   }
   render() {
     return (
@@ -32,6 +32,7 @@ class HeaderForm extends React.Component {
         <span>
           Hola {this.state.displayName}!
         </span>
+        <Timer />
         <Button onClick={this.signOut}>Salir!</Button>
       </Row>
     )

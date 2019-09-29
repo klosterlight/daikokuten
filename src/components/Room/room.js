@@ -31,7 +31,7 @@ class RoomBase extends React.Component {
         const messageList = Object.keys(messageObject).map(key => ({
           ...messageObject[key],
           uid: key,
-          sentAt: moment(messageObject[key].timestamp).format("DD MM YYYY hh:mm:ss")
+          sentAt: moment(messageObject[key].timestamp).format("DD/MM/YYYY hh:mm:ss")
         }));
         this.setState({
           messages: messageList,
