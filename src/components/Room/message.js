@@ -5,7 +5,7 @@ export default class Message extends React.Component {
   render() {
     return(
       <li>
-        <strong>{this.props.message.userId}</strong> {this.props.message.text}
+        <strong>{this.props.message.displayName}:</strong> {this.props.message.text}
       </li>
     )
   }

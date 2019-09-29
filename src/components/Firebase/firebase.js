@@ -21,6 +21,7 @@ class Firebase {
     this.db = app.database();
     this.signInOptions = [
       app.auth.EmailAuthProvider.PROVIDER_ID
+      // TODO: ADD Anonymous user
     ];
     this.auth.onAuthStateChanged((user) => {
       if(user)

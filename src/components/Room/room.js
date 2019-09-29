@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Header from '../Common';
 import { Messages } from './index';
+import { CurrentUser } from '../Common';
 import { withFirebase } from '../Firebase';
 
 class RoomBase extends React.Component {
@@ -16,11 +17,17 @@ class RoomBase extends React.Component {
     };
   }
   componentDidMount() {
-    this.setState({ loading: true });
+    const currentUser = CurrentUser();
+    if(currentUser) {
+      this.setState({
+        displayName: currentUser.displayName
+      });
+    }
     this.props.firebase.messages().on('child_added', snapshot => {
-      console.log(snapshot);
+      const snapshotValue = snapshot.val();
       const messageObject = {
-        text: snapshot.val().text,
+        text: snapshotValue.text,
+        displayName: snapshotValue.displayName,
         uid: snapshot.key
       };
       // convert messages list from snapshot
@@ -40,6 +47,7 @@ class RoomBase extends React.Component {
   onCreateMessage = event => {
     this.props.firebase.messages().push({
       text: this.state.text,
+      displayName: this.state.displayName
     }).then(e => {
       console.log(e);
     }).catch(e => {
