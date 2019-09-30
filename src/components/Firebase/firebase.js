@@ -51,6 +51,8 @@ class Firebase {
   roomClosingTime = () => this.db.ref('closingTime');
 
   rooms = () => this.db.ref('rooms');
+
+  bid = () => this.db.ref('bids');
 }
 
 export default Firebase;

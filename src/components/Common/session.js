@@ -1,4 +1,4 @@
-const currentUser = (() => {
+const CurrentUser = (() => {
   const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
   return currentUser;
 })
@@ -11,4 +11,4 @@ export const isUserLoggedIn = (() => {
   }
 })
 
-export default currentUser;
+export default CurrentUser;

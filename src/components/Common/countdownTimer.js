@@ -12,6 +12,7 @@ class CountdownTimerComponent extends React.Component {
       if(this.showAlert) {
         alert("SE ACABO")
         this.showAlert = false;
+        this.props.denyBid();
       }
       this.remainingTime = 0;
       return "00:00"
@@ -27,7 +28,6 @@ class CountdownTimerComponent extends React.Component {
   }
 
   componentDidMount() {
-    const self = this;
     this.showAlert = true;
     this.props.firebase.roomClosingTime().on('value', (offset) => {
       const closingTimeValue = offset.val() || 0;

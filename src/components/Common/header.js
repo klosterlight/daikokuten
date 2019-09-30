@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import { withFirebase } from '../Firebase';
 import { withRouter } from "react-router-dom";
 import * as ROUTES from '../../constants/routes';
-import Timer from './timer';
 import moment from "moment";
 
 const TIME_FORMAT = "hh:mm:ss a";
@@ -25,7 +24,6 @@ class HeaderForm extends React.Component {
         displayName: currentUser.displayName
       });
     }
-    const self = this;
     this.props.firebase.serverTime().on('value', (offset) => {
       const offsetVal = offset.val() || 0;
       const currentServerTime = moment() + offsetVal;

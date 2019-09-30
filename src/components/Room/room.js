@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Header from '../Common';
 import { Messages } from './index';
+import { Bid } from './index';
 import { CountdownTimer } from '../Common';
 import { CurrentUser } from '../Common';
 import { withFirebase } from '../Firebase';
@@ -17,13 +18,13 @@ class RoomBase extends React.Component {
       loading: false,
       messages: [],
       text: '',
-      tickTimer: 0
+      tickTimer: 0,
+      denyBid: false
     };
   }
 
   componentDidMount() {
     const currentUser = CurrentUser();
-    const self = this;
     if(currentUser) {
       this.setState({
         displayName: currentUser.displayName
@@ -72,6 +73,12 @@ class RoomBase extends React.Component {
     event.preventDefault();
   };
 
+  denyBid = () => {
+    this.setState({
+      denyBid: true
+    });
+  }
+
   render() {
     const { text, messages } = this.state;
     return(
@@ -79,8 +86,9 @@ class RoomBase extends React.Component {
         <Header tickTimer={this.state.tickTimer}/>
         <Row xs={12}>
           <Col xs={8}>
-            <CountdownTimer tickTimer={this.state.tickTimer} />
+            <CountdownTimer tickTimer={this.state.tickTimer} denyBid={this.denyBid} />
             <CreateRoom />
+            <Bid denyBid={this.state.denyBid} />
           </Col>
           <Col xs={4}>
             <Row>
