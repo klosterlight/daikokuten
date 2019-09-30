@@ -94,7 +94,10 @@ class RoomBase extends React.Component {
               tickTimer={this.state.tickTimer}
               denyBid={this.denyBid}
               roomId={this.props.match.params.id} />
-            <Bid denyBid={this.state.denyBid} />
+            <Bid
+              denyBid={this.state.denyBid}
+              roomId={this.props.match.params.id}
+            />
           </Col>
           <Col xs={4}>
             <Row>

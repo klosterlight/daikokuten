@@ -7,7 +7,7 @@ class BidComponent extends React.Component {
   bid = () => {
     // TODO: BID on Auction
     const currentUser = CurrentUser();
-    this.props.firebase.bid().push({
+    this.props.firebase.bid(this.props.roomId).push({
       uid: currentUser.uid,
       displayName: currentUser.displayName,
       timestamp: this.props.firebase.timeStamp

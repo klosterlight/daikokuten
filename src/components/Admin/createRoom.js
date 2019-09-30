@@ -5,7 +5,7 @@ import { withFirebase } from '../Firebase';
 
 class CreateRoomComponent extends React.Component {
   create = () => {
-    const closingTime = moment().add(5, 'minutes');
+    const closingTime = moment().add(60, 'minutes');
     this.props.firebase.rooms().push({
       closingTime: closingTime.valueOf(),
       initialValue: 1000,
