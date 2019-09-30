@@ -8,8 +8,8 @@ import { Bid } from './index';
 import { CountdownTimer } from '../Common';
 import { CurrentUser } from '../Common';
 import { withFirebase } from '../Firebase';
-import CreateRoom from '../Admin';
 import moment from "moment";
+import * as ROUTES from '../../constants/routes';
 
 class RoomBase extends React.Component {
   constructor(props) {
@@ -30,29 +30,33 @@ class RoomBase extends React.Component {
         displayName: currentUser.displayName
       });
     }
-    this.setState({ loading: true });
-    this.interval = setInterval(() => {
-      this.setState({
-        tickTimer: this.state.tickTimer + 1
-      });
-    }, 1000);
-    this.props.firebase.messages().on('value', snapshot => {
-      const messageObject = snapshot.val();
-      if(messageObject) {
-        const messageList = Object.keys(messageObject).map(key => ({
-          ...messageObject[key],
-          uid: key,
-          sentAt: moment(messageObject[key].timestamp).format("DD/MM/YYYY hh:mm:ss")
-        }));
+    if(this.props.match.params.id) {
+      this.setState({ loading: true });
+      this.interval = setInterval(() => {
         this.setState({
-          messages: messageList,
-          loading: false,
+          tickTimer: this.state.tickTimer + 1
         });
-      }
-    });
+      }, 1000);
+      this.props.firebase.messages(this.props.match.params.id).on('value', snapshot => {
+        const messageObject = snapshot.val();
+        if(messageObject) {
+          const messageList = Object.keys(messageObject).map(key => ({
+            ...messageObject[key],
+            uid: key,
+            sentAt: moment(messageObject[key].timestamp).format("DD/MM/YYYY hh:mm:ss")
+          }));
+          this.setState({
+            messages: messageList,
+            loading: false,
+          });
+        }
+      });
+    } else {
+      this.props.history.push(ROUTES.ROOMS);
+    }
   }
   componentWillUnmount() {
-    this.props.firebase.messages().off();
+    this.props.firebase.messages(this.props.match.params.id).off();
   }
 
   onChangeText = event => {
@@ -60,7 +64,7 @@ class RoomBase extends React.Component {
   };
 
   onCreateMessage = event => {
-    this.props.firebase.messages().push({
+    this.props.firebase.messages(this.props.match.params.id).push({
       text: this.state.text,
       displayName: this.state.displayName,
       timestamp: this.props.firebase.timeStamp
@@ -86,8 +90,10 @@ class RoomBase extends React.Component {
         <Header tickTimer={this.state.tickTimer}/>
         <Row xs={12}>
           <Col xs={8}>
-            <CountdownTimer tickTimer={this.state.tickTimer} denyBid={this.denyBid} />
-            <CreateRoom />
+            <CountdownTimer
+              tickTimer={this.state.tickTimer}
+              denyBid={this.denyBid}
+              roomId={this.props.match.params.id} />
             <Bid denyBid={this.state.denyBid} />
           </Col>
           <Col xs={4}>

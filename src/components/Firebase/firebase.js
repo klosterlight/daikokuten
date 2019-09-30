@@ -44,15 +44,15 @@ class Firebase {
     this.auth.signOut();
   }
 
-  messages = () => this.db.ref('messages');
+  messages = (roomId) => this.db.ref(`rooms/${roomId}/messages`);
 
   serverTime = () => this.db.ref('/.info/serverTimeOffset');
 
-  roomClosingTime = () => this.db.ref('closingTime');
-
   rooms = () => this.db.ref('rooms');
 
-  bid = () => this.db.ref('bids');
+  bid = (roomId) => this.db.ref(`rooms/${roomId}/bids`);
+
+  room = (roomId) => this.db.ref(`rooms/${roomId}`);
 }
 
 export default Firebase;

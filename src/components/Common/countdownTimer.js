@@ -29,9 +29,9 @@ class CountdownTimerComponent extends React.Component {
 
   componentDidMount() {
     this.showAlert = true;
-    this.props.firebase.roomClosingTime().on('value', (offset) => {
+    this.props.firebase.room(this.props.roomId).child('closingTime').on('value', (offset) => {
       const closingTimeValue = offset.val() || 0;
-      const closingTime = moment(closingTimeValue.closingTime);
+      const closingTime = moment(closingTimeValue);
       this.props.firebase.serverTime().on('value', (offset) => {
         const serverTimeValue = offset.val() || 0;
         const serverTime = moment() + serverTimeValue;
