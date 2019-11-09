@@ -1,9 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { LogIn, Landing } from "./components/Common";
-import Room, { Rooms } from "./components/Room";
-import { withFirebase } from './components/Firebase';
-import * as ROUTES from './constants/routes';
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { LogIn, Landing, NotFound } from "./components/Common";
+import Room, { Rooms } from "components/Room";
+import { withFirebase } from 'components/Firebase';
+import * as ROUTES from 'constants/routes';
 
 class AppForm extends React.Component {
 	render() {
@@ -13,7 +13,9 @@ class AppForm extends React.Component {
 					<Route path={ROUTES.LOGIN} component={LogIn} />
 					<Route path={ROUTES.ROOM} component={Room} />
 					<Route path={ROUTES.ROOMS} component={Rooms} />
-					<Route path={ROUTES.LANDING} component={Landing} />
+					<Route exact path={ROUTES.LANDING} component={Landing} />
+					<Route path={ROUTES.NOT_FOUND} component={NotFound} />
+					<Redirect to={ROUTES.NOT_FOUND} />
 				</Switch>
 			</Router>
 

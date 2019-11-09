@@ -39,7 +39,7 @@ export default class LandingBase extends React.Component {
 												<a href="#services">¿Como funciona?</a>
 											</li>
 											<li className="scrollToLink">
-												<a href="#screens">Subastas</a>
+												<a href="/auctions">Subastas</a>
 											</li>
 											<li className="scrollToLink">
 												<a href="#pricing">Tokens</a>
@@ -48,7 +48,7 @@ export default class LandingBase extends React.Component {
 								</div>
 
 								<div className="right-side-box">
-									<a href="/" className="thm-btn header-one__btn">pre-registro</a>
+									<a href="/login" className="thm-btn header-one__btn">pre-registro</a>
 								</div>
 
 							</div>

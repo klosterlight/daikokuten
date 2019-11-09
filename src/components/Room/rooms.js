@@ -2,9 +2,9 @@ import React from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CreateRoom from '../Admin';
-import { withFirebase } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+import CreateRoom from 'components/Admin';
+import { withFirebase } from 'components/Firebase';
+import * as ROUTES from 'constants/routes';
 
 class RoomsComponent extends React.Component {
 	constructor(props) {
