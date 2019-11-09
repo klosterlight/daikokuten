@@ -1,8 +1,10 @@
+import RoomHeader from './roomHeader';
 import Header from './header';
+import Footer from './footer';
 import LogIn from './login';
 import CurrentUser, {IsUserLoggedIn } from './session';
 import CountdownTimer from './countdownTimer';
 import Landing from './landing';
 import NotFound from './notFound';
-export default Header;
-export { LogIn, CurrentUser, IsUserLoggedIn, CountdownTimer, Landing, NotFound };
+export default RoomHeader;
+export { LogIn, CurrentUser, IsUserLoggedIn, CountdownTimer, Landing, NotFound, Header, Footer };

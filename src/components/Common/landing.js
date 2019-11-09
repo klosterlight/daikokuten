@@ -1,9 +1,8 @@
 import React from "react";
 
 import { withFirebase } from 'components/Firebase';
-import { IsUserLoggedIn, SignOut } from 'components/Common';
+import { Header, Footer } from 'components/Common';
 
-import logo from "assets/images/logo-1-1.png";
 import banner from "assets/images/banner-1-1.png";
 import video from "assets/images/video.png";
 import appScreen1 from "assets/images/app-screen-1-1.png";
@@ -17,83 +16,12 @@ import testi2 from "assets/images/testi-1-2.png";
 import testi3 from "assets/images/testi-1-3.png";
 
 class LandingBase extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			sessionMessage: ''
-		}
-	}
-
-	componentDidMount = () => {
-		let message = '';
-		if(IsUserLoggedIn()) {
-			message = 'Salir!';
-		} else {
-			message = 'pre-registro';
-		}
-		this.setState({
-			sessionMessage: message
-		});
-	}
-
-	sessionAction = () => {
-		let message = '';
-		if(IsUserLoggedIn()) {
-			this.props.firebase.signOut();
-			message = 'pre-registro';
-			this.setState({
-				sessionMessage: message
-			});
-		} else {
-			this.props.history.push('login');
-		}
-	}
 
 	render() {
 		return (
 			<React.Fragment>
 				<div className="page-wrapper" >
-					<header className="site-header header-one ">
-						<nav className="navbar navbar-expand-lg navbar-light header-navigation stricky">
-							<div className="container clearfix">
-
-								<div className="logo-box clearfix">
-									<a className="navbar-brand" href="index.html">
-										<img src={logo} className="main-logo" width="150" alt="Awesome" />
-									</a>
-									<button className="menu-toggler" data-target=".main-navigation">
-										<span className="fa fa-bars"></span>
-									</button>
-								</div>
-
-								<div className="main-navigation">
-										<ul className=" navigation-box one-page-scroll-menu ">
-											<li className="current scrollToLink">
-												<a href="#home">Inicio</a>
-											</li>
-											<li className="scrollToLink">
-												<a href="#services">¿Como funciona?</a>
-											</li>
-											<li className="scrollToLink">
-												<a href="/auctions">Subastas</a>
-											</li>
-											<li className="scrollToLink">
-												<a href="#pricing">Tokens</a>
-											</li>
-										</ul>
-								</div>
-
-								<div className="right-side-box">
-									<a href="#" onClick={() => this.sessionAction() } className="thm-btn header-one__btn">
-										{this.state.sessionMessage}
-									</a>
-								</div>
-
-							</div>
-
-						</nav>
-					</header>
-
+					<Header />
 					<section className="banner-one" id="home">
 
 						<div className="container">
@@ -288,58 +216,7 @@ class LandingBase extends React.Component {
 							</div>
 						</div>
 					</section>
-					<footer className="site-footer">
-						<div className="site-footer__upper">
-							<div className="container">
-								<div className="row">
-									<div className="col-lg-5">
-										<div className="footer-widget">
-											<a href="index.html" className="footer-widget__logo">
-												<img src={logo} width="132" alt="Awesome" /></a>
-											<p className="footer-widget__text">!dale click en comprar antes de que alguien más te lo vaya a ganar!</p>
-										</div>
-									</div>
-									<div className="col-lg-4">
-										<div className="footer-widget">
-											<ul className="footer-widget__links">
-												<li className="footer-widget__links-item"><a href="/">Inicio</a></li>
-												<li className="footer-widget__links-item"><a href="/">¿Cómo funciona?</a></li>
-												<li className="footer-widget__links-item"><a href="/">Tokens</a></li>
-												<li className="footer-widget__links-item"><a href="/auctions.html">Subastas</a></li>
-											</ul>
-											<ul className="footer-widget__links">
-												<li className="footer-widget__links-item"><a href="/">politicas y privacidad</a></li>
-												<li className="footer-widget__links-item"><a href="/">Contáctanos</a></li>
-												<li className="footer-widget__links-item"><a href="/">Preguntas frecuentes</a></li>
-											</ul>
-										</div>
-									</div>
-									<div className="col-lg-3">
-										<div className="footer-widget">
-											<a href="/" className="footer-widget__btn">
-												<i className="fa fa-play"></i>
-												<span className="footer-widget__btn-text">
-														Descarga <span className="footer-widget__btn-text-highlight">Limbo App</span>
-												</span>
-											</a>
-
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="site-footer__bottom">
-							<div className="container">
-								<div className="site-footer__social">
-									<a href="/"><i className="fa fa-facebook-square"></i></a>
-									<a href="/"><i className="fa fa-twitter"></i></a>
-									<a href="/"><i className="fa fa-instagram"></i></a>
-									<a href="/"><i className="fa fa-pinterest-p"></i></a>
-								</div>
-								<p className="site-footer__copy-text"><i className="fa fa-copyright"></i>copyright 2019  <a href="/">limboauctions.com</a></p>
-							</div>
-						</div>
-					</footer>
+					<Footer />
 				</div>
 				<a href="/" data-target="html" className="scroll-to-target scroll-to-top"><i className="fa fa-angle-up"></i></a>
 			</React.Fragment>

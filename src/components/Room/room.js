@@ -2,14 +2,14 @@ import React from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Header from '../Common';
+import RoomHeader from 'components/Common';
 import { Messages } from './index';
 import { Bid } from './index';
-import { CountdownTimer } from '../Common';
-import { CurrentUser } from '../Common';
-import { withFirebase } from '../Firebase';
+import { CountdownTimer } from 'components/Common';
+import { CurrentUser } from 'components/Common';
+import { withFirebase } from 'components/Firebase';
 import moment from "moment";
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from 'constants/routes';
 
 class RoomBase extends React.Component {
 	constructor(props) {
@@ -87,7 +87,7 @@ class RoomBase extends React.Component {
 		const { text, messages } = this.state;
 		return(
 			<Container>
-				<Header tickTimer={this.state.tickTimer}/>
+				<RoomHeader tickTimer={this.state.tickTimer}/>
 				<Row xs={12}>
 					<Col xs={8}>
 						<CountdownTimer
