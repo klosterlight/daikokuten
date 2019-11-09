@@ -18,11 +18,11 @@ admin.initializeApp(functions.config().firebase);
 // });
 
 exports.logBid = functions.database.ref('/rooms/{roomId}/bids/{bidId}').onCreate((snapshot, context) => {
-  const bid = snapshot.val();
+	const bid = snapshot.val();
 
-  return admin.database().ref(`/rooms/${context.params.roomId}/messages`).push({
-    text: `El usuario ${bid.displayName} ha hecho una puja`,
-    displayName: 'SYSTEM',
-    timestamp: admin.database.ServerValue.TIMESTAMP
-  });
+	return admin.database().ref(`/rooms/${context.params.roomId}/messages`).push({
+		text: `El usuario ${bid.displayName} ha hecho una puja`,
+		displayName: 'SYSTEM',
+		timestamp: admin.database.ServerValue.TIMESTAMP
+	});
 })
