@@ -40,7 +40,7 @@ class Firebase {
 		})
 	}
 
-	signOut() {
+	signOut = () => {
 		this.auth.signOut();
 	}
 

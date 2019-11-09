@@ -8,7 +8,7 @@ let uiConfig = {
 	// Popup signin flow rather than redirect flow.
 	signInFlow: 'popup',
 	// Redirect to /rooms after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-	signInSuccessUrl: `${ROUTES.ROOMS}`,
+	signInSuccessUrl: `${ROUTES.LANDING}`,
 	// signInSuccess: (e) => {
 	//   console.log(e);
 	//   console.log('signed in');

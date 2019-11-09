@@ -1,4 +1,8 @@
 import React from "react";
+
+import { withFirebase } from 'components/Firebase';
+import { IsUserLoggedIn, SignOut } from 'components/Common';
+
 import logo from "assets/images/logo-1-1.png";
 import banner from "assets/images/banner-1-1.png";
 import video from "assets/images/video.png";
@@ -12,7 +16,39 @@ import testi1 from "assets/images/testi-1-1.png";
 import testi2 from "assets/images/testi-1-2.png";
 import testi3 from "assets/images/testi-1-3.png";
 
-export default class LandingBase extends React.Component {
+class LandingBase extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			sessionMessage: ''
+		}
+	}
+
+	componentDidMount = () => {
+		let message = '';
+		if(IsUserLoggedIn()) {
+			message = 'Salir!';
+		} else {
+			message = 'pre-registro';
+		}
+		this.setState({
+			sessionMessage: message
+		});
+	}
+
+	sessionAction = () => {
+		let message = '';
+		if(IsUserLoggedIn()) {
+			this.props.firebase.signOut();
+			message = 'pre-registro';
+			this.setState({
+				sessionMessage: message
+			});
+		} else {
+			this.props.history.push('login');
+		}
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -48,7 +84,9 @@ export default class LandingBase extends React.Component {
 								</div>
 
 								<div className="right-side-box">
-									<a href="/login" className="thm-btn header-one__btn">pre-registro</a>
+									<a href="#" onClick={() => this.sessionAction() } className="thm-btn header-one__btn">
+										{this.state.sessionMessage}
+									</a>
 								</div>
 
 							</div>
@@ -308,3 +346,7 @@ export default class LandingBase extends React.Component {
 		)
 	}
 }
+
+const Landing = withFirebase(LandingBase);
+
+export default Landing;
