@@ -2,6 +2,14 @@
   "database": {
     "rules": "database.rules.json"
   },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "emulators": {
+    "firestore": {
+      "port": "8081"
+    }
+  },
   "functions": {
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" run lint"

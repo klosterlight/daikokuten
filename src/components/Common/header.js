@@ -1,6 +1,8 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 import { IsUserLoggedIn, SignOut } from 'components/Common';
+import { withFirebase } from "components/Firebase";
+import { compose } from 'recompose';
 
 import logo from "assets/images/logo-1-1.png";
 
@@ -12,7 +14,7 @@ class HeaderBase extends React.Component {
 		}
 	}
 
-	componentDidMount = () => {
+	componentDidMount() {
 		let message = '';
 		if(IsUserLoggedIn()) {
 			message = 'Salir!';
@@ -24,7 +26,7 @@ class HeaderBase extends React.Component {
 		});
 	}
 
-	sessionAction = () => {
+	sessionAction() {
 		let message = '';
 		if(IsUserLoggedIn()) {
 			this.props.firebase.signOut();
@@ -33,7 +35,7 @@ class HeaderBase extends React.Component {
 				sessionMessage: message
 			});
 		} else {
-			this.props.history.push('login');
+			this.props.history.push('/login');
 		}
 	}
 	render() {
@@ -54,24 +56,24 @@ class HeaderBase extends React.Component {
 						<div className="main-navigation">
 								<ul className=" navigation-box one-page-scroll-menu ">
 									<li className="current scrollToLink">
-										<a href="#home">Inicio</a>
+										<a href="/">Inicio</a>
 									</li>
 									<li className="scrollToLink">
-										<a href="#services">¿Como funciona?</a>
+										<a href="/">¿Como funciona?</a>
 									</li>
 									<li className="scrollToLink">
 										<a href="/auctions">Subastas</a>
 									</li>
 									<li className="scrollToLink">
-										<a href="#pricing">Tokens</a>
+										<a href="/">Tokens</a>
 									</li>
 								</ul>
 						</div>
 
 						<div className="right-side-box">
-							<a href="#" onClick={() => this.sessionAction() } className="thm-btn header-one__btn">
+							<button className="thm-btn header-one__btn" onClick={() => this.sessionAction() } >
 								{this.state.sessionMessage}
-							</a>
+							</button>
 						</div>
 
 					</div>
@@ -82,5 +84,8 @@ class HeaderBase extends React.Component {
 	}
 }
 
-const Header = withRouter(HeaderBase);
+const Header = compose(
+	withRouter,
+	withFirebase,
+)(HeaderBase);
 export default Header;

@@ -1,13 +1,15 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import 'firebase/firestore';
+import 'firebase/storage';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyALHT9heGbzKAfPPGsXLcAYhvoyeNypbjc",
 	authDomain: "daikokuten-b0e1a.firebaseapp.com",
 	databaseURL: "https://daikokuten-b0e1a.firebaseio.com",
 	projectId: "daikokuten-b0e1a",
-	storageBucket: "",
+	storageBucket: "gs://daikokuten-b0e1a.appspot.com",
 	messagingSenderId: "723772091282",
 	appId: "1:723772091282:web:7357af50e83083a4d8af4b",
 	measurementId: "G-5P70985YNF"
@@ -16,9 +18,10 @@ const firebaseConfig = {
 class Firebase {
 	constructor() {
 		app.initializeApp(firebaseConfig);
-
 		this.auth = app.auth();
 		this.db = app.database();
+		this.firestore = app.firestore();
+		this.storage = app.storage();
 		this.timeStamp = app.database.ServerValue.TIMESTAMP;
 		this.signInOptions = [
 			app.auth.EmailAuthProvider.PROVIDER_ID
@@ -53,6 +56,15 @@ class Firebase {
 	bid = (roomId) => this.db.ref(`rooms/${roomId}/bids`);
 
 	room = (roomId) => this.db.ref(`rooms/${roomId}`);
+
+	addAuction = (auctionParams) => {
+		return this.firestore.collection("auctions").add(auctionParams);
+	}
+
+	uploadFile = (fileName, blob) => {
+		console.log(this.storage.ref());
+		return this.storage.ref().child(fileName).put(blob);
+	}
 }
 
 export default Firebase;

@@ -6,6 +6,7 @@ import Firebase, { FirebaseContext } from './components/Firebase';
 import 'assets/css/style.css';
 import 'assets/css/monoestereo.css';
 import 'assets/css/responsive.css';
+import 'assets/css/endline.css';
 
 ReactDOM.render(
 		<FirebaseContext.Provider value={new Firebase()}>
