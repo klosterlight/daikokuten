@@ -2,8 +2,64 @@ import React from 'react';
 import { withFirebase } from 'components/Firebase';
 import { Header, Footer } from 'components/Common';
 import logo from "assets/images/logo-1-1.png";
+import AuctionTile from './_auctionTile';
+import moment from "moment";
+
+const ONE_TICK = 1000;
 
 class AuctionsBase extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			auctions: [],
+			tickTimer: 0,
+			serverTime: 0
+		};
+	}
+
+	componentDidMount() {
+		this.props.firebase.serverTime().on('value', (offset) => {
+			const serverTimeValue = offset.val() || 0;
+			const serverTime = moment() + serverTimeValue;
+
+			this.setState({
+				serverTime: serverTime
+			}, this.getAuctions());
+		});
+
+		this.interval = setInterval(() => {
+			this.setState({
+				tickTimer: this.state.tickTimer + 1
+			});
+		}, ONE_TICK);
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.interval);
+	}
+
+	getAuctions = () => {
+		// TODO: ADD Pagination
+		// TODO: ADD Loading
+		this.props.firebase.getViableAuctions().then((querySnapshot) => {
+		// this.props.firebase.getAuctions().then((querySnapshot) => {
+			let auctions = [];
+			querySnapshot.forEach((doc) => {
+				auctions.push(doc.data());
+			});
+			this.setState({
+				auctions: auctions
+			});
+		});
+	}
+
+	renderAuctions = () => {
+		return this.state.auctions.map((auction, index) => {
+			return <AuctionTile key={index} auction={auction} tickTimer={this.state.tickTimer} tickInterval={ONE_TICK} serverTime={this.state.serverTime} />;
+		});
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -25,194 +81,7 @@ class AuctionsBase extends React.Component {
 					<section className="blog-one blog-page">
 						<div className="container">
 							<div className="row">
-								<div className="col-lg-4">
-									<div className="blog-one__single">
-										<div className="blog-one__image">
-											<img src="images/blog-1-1.jpg" alt="Limbo" />
-											<a href="room.html"><i className="appyn-icon-plus-symbol"></i></a>
-										</div>
-										<div className="blog-one__content">
-
-											<h3 className="blog-one__title"><a href="room.html">iPhone 11</a></h3>
-											<div className="priceNshit">
-												<h4>$21,000</h4>
-												<span>
-													180 tokens
-													<div>entrar a la subasta</div>
-												</span>
-											</div>
-
-											<div className="timenshit">
-												<div className="fecha">
-													<div> 10 de Octubre 2019</div>
-													16:20 hrs
-												</div>
-												<div className="falta">
-													<div>Comienza en: </div>
-													12:10:12
-												</div>
-
-											</div>
-
-											<p className="blog-one__text">There are many variations of passages of available but majority have alteration in some by inject humour or random words.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4">
-									<div className="blog-one__single">
-										<div className="blog-one__image">
-											<img src="images/blog-1-2.jpg" alt="Limbo" />
-											<a href="room.html"><i className="appyn-icon-plus-symbol"></i></a>
-										</div>
-										<div className="blog-one__content">
-
-											<h3 className="blog-one__title"><a href="room.html">Samsung Note 10 </a></h3>
-											<div className="priceNshit">
-												<h4>$18,990</h4>
-												<span>
-													150 tokens
-													<div>entrar a la subasta</div>
-												</span>
-											</div>
-											<div className="timenshit">
-												<div className="fecha">
-													<div> 11 de Octubre 2019</div>
-													16:20 hrs
-												</div>
-												<div className="falta">
-													<div>Comienza en: </div>
-													12:10:12
-												</div>
-
-											</div>
-											<p className="blog-one__text">There are many variations of passages of available but majority have alteration in some by inject humour or random words.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4">
-									<div className="blog-one__single">
-										<div className="blog-one__image">
-											<img src="images/blog-1-3.jpg" alt="Limbo" />
-											<a href="room.html"><i className="appyn-icon-plus-symbol"></i></a>
-										</div>
-										<div className="blog-one__content">
-
-											<h3 className="blog-one__title"><a href="room.html">DJI Mavic Pro</a></h3>
-											<div className="priceNshit">
-												<h4>$18,500</h4>
-												<span className="ready">
-													Listo
-													<div>para entrar</div>
-												</span>
-											</div>
-											<div className="timenshit">
-												<div className="fecha">
-													<div> 12 de Octubre 2019</div>
-													16:20 hrs
-												</div>
-												<div className="falta">
-													<div>Comienza en: </div>
-													12:10:12
-												</div>
-
-											</div>
-											<p className="blog-one__text">There are many variations of passages of available but majority have alteration in some by inject humour or random words.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4">
-									<div className="blog-one__single">
-										<div className="blog-one__image">
-											<img src="images/blog-1-4.jpg" alt="Limbo" />
-											<a href="room.html"><i className="appyn-icon-plus-symbol"></i></a>
-										</div>
-										<div className="blog-one__content">
-
-											<h3 className="blog-one__title"><a href="room.html">Bose Soundlink</a></h3>
-											<div className="priceNshit">
-												<h4>$4,690</h4>
-												<span>
-													150 tokens
-													<div>entrar a la subasta</div>
-												</span>
-											</div>
-											<div className="timenshit">
-												<div className="fecha">
-													<div> 14 de Octubre 2019</div>
-													16:20 hrs
-												</div>
-												<div className="falta">
-													<div>Comienza en: </div>
-													42:10:12
-												</div>
-
-											</div>
-											<p className="blog-one__text">There are many variations of passages of available but majority have alteration in some by inject humour or random words.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4">
-									<div className="blog-one__single">
-										<div className="blog-one__image">
-											<img src="images/blog-1-5.jpg" alt="Limbo" />
-											<a href="room.html"><i className="appyn-icon-plus-symbol"></i></a>
-										</div>
-										<div className="blog-one__content">
-
-											<h3 className="blog-one__title"><a href="room.html">Teclado Mecanico</a></h3>
-											<div className="priceNshit">
-												<h4>$3,390</h4>
-												<span className="ready">
-													Listo
-													<div>para entrar</div>
-												</span>
-											</div>
-											<div className="timenshit">
-												<div className="fecha">
-													<div> 15 de Octubre 2019</div>
-													16:20 hrs
-												</div>
-												<div className="falta">
-													<div>Comienza en: </div>
-													62:10:12
-												</div>
-
-											</div>
-											<p className="blog-one__text">There are many variations of passages of available but majority have alteration in some by inject humour or random words.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4">
-									<div className="blog-one__single">
-										<div className="blog-one__image">
-											<img src="images/blog-1-6.jpg" alt="Limbo" />
-											<a href="room.html"><i className="appyn-icon-plus-symbol"></i></a>
-										</div>
-										<div className="blog-one__content">
-
-											<h3 className="blog-one__title"><a href="room.html">Lenovo Thinkpad x10</a></h3>
-											<div className="priceNshit">
-												<h4>$38,990</h4>
-												<span>
-													150 tokens
-													<div>entrar a la subasta</div>
-												</span>
-											</div>
-											<div className="timenshit">
-												<div className="fecha">
-													<div> 16 de Octubre 2019</div>
-													16:20 hrs
-												</div>
-												<div className="falta">
-													<div>Comienza en: </div>
-													82:10:12
-												</div>
-
-											</div>
-											<p className="blog-one__text">There are many variations of passages of available but majority have alteration in some by inject humour or random words.</p>
-										</div>
-									</div>
-								</div>
+								{this.renderAuctions()}
 							</div>
 							<div className="blog-post-pagination text-center">
 								<a className="prev" href="#"><i className="fa fa-angle-left"></i></a>

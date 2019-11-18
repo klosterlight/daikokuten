@@ -61,10 +61,26 @@ class Firebase {
 		return this.firestore.collection("auctions").add(auctionParams);
 	}
 
+	getAuctions = () => {
+		return this.firestore.collection("auctions").orderBy("createdAt", "desc").get();
+	}
+
+	getViableAuctions = () => {
+		const now = new Date();
+		return this.firestore.collection("auctions").where("endingAt", ">=", now).orderBy("endingAt", "asc").get();
+	}
+
 	uploadFile = (fileName, blob) => {
 		console.log(this.storage.ref());
 		return this.storage.ref().child(fileName).put(blob);
 	}
+
+	getFile = (id) => {
+		console.log(id);
+		console.log('getting file');
+		return this.storage.ref().child(id).getDownloadURL();
+	}
+
 }
 
 export default Firebase;

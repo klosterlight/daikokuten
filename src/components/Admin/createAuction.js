@@ -16,22 +16,25 @@ class CreateAuctionComponent extends React.Component {
 			maxAuctions: 10,
 			description: '',
 			imageUrl: '',
-			startingAt: moment().format(),
-			endingAt: moment().add(10, "minutes").format()
+			tokens: 100,
+			startingAt: moment().unix(),
+			endingAt: moment().add(10, "minutes").unix()
 		}
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
 		let auctionParams = this.state;
-		console.log(auctionParams);
 		// TODO: Move this to server side. Price rate decrease per tick (1 TICK = 1s).
 		// (startingPrice - endPrice) / auction_duration
 		const auctionDuration = moment(auctionParams.endingAt).unix() - moment(auctionParams.startingAt).unix();
+		auctionParams.startingAt = new Date(auctionParams.startingAt);
+		auctionParams.endingAt = new Date(auctionParams.endingAt);
 		const totalPrice = auctionParams.startingPrice - auctionParams.endPrice;
-		console.log(auctionDuration);
 		auctionParams.priceDecreaseRate = totalPrice / auctionDuration;
-		console.log(auctionParams);
+
+		auctionParams.createdAt = new Date();
+		auctionParams.updatedAt = new Date();
 
 		// TODO: Add server side validations
 		// TODO: Add client side validations
@@ -114,6 +117,10 @@ class CreateAuctionComponent extends React.Component {
 							<div className="form-group">
 								<label htmlFor="endPrice">Precio mas bajo</label>
 								<input type="number" className="form-control" id="endPrice" name="endPrice" onChange={this.handleChange} />
+							</div>
+							<div className="form-group">
+								<label htmlFor="tokens">Tokens</label>
+								<input type="number" className="form-control" id="tokens" name="tokens" onChange={this.handleChange} />
 							</div>
 							<div className="form-group">
 								<label htmlFor="startingAt">Empieza en</label>
