@@ -1,5 +1,4 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
 import moment from "moment";
 import { withFirebase } from 'components/Firebase';
 import { Header, Footer } from 'components/Common';
@@ -14,7 +13,8 @@ class CreateAuctionComponent extends React.Component {
 			currency: 'MXN',
 			priceDecreaseRate: 0,
 			maxAuctions: 10,
-			description: '',
+			shortDescription: '',
+			longDescription: '',
 			imageUrl: '',
 			tokens: 100,
 			startingAt: moment().unix(),
@@ -49,7 +49,6 @@ class CreateAuctionComponent extends React.Component {
 	}
 
 	uploadFile = (e) => {
-		const target = e.target;
 		const file = e.target.files[0];
 		const self = this;
 		if(file)
@@ -107,8 +106,12 @@ class CreateAuctionComponent extends React.Component {
 								<input type="text" className="form-control" id="title" name="title" onChange={this.handleChange} />
 							</div>
 							<div className="form-group">
-								<label htmlFor="description">Descripción</label>
-								<textarea className="form-control" row="3" id="description" name="description" value={this.state.description} onChange={this.handleChange}></textarea>
+								<label htmlFor="shortDescription">Intro</label>
+								<textarea className="form-control" row="3" id="shortDescription" name="shortDescription" value={this.state.shortDescription} onChange={this.handleChange}></textarea>
+							</div>
+							<div className="form-group">
+								<label htmlFor="longDescription">Descripción</label>
+								<textarea className="form-control" row="3" id="longDescription" name="longDescription" value={this.state.longDescription} onChange={this.handleChange}></textarea>
 							</div>
 							<div className="form-group">
 								<label htmlFor="startingPrice">Precio Inicial</label>

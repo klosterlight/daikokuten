@@ -1497,7 +1497,7 @@ a:visited {
   margin-top: 0px;
   margin-bottom: 0px;
 }
-.blog-post-pagination a {
+.blog-post-pagination button {
   display: inline-block;
   vertical-align: middle;
   width: 40px;
@@ -1512,19 +1512,19 @@ a:visited {
   transition: all .4s ease;
   font-weight: 600;
 }
-.blog-post-pagination a.prev, .blog-post-pagination a.next {
+.blog-post-pagination button.prev, .blog-post-pagination button.next {
   background: #1b2143;
   color: #fff;
   font-size: 14px;
 }
-.blog-post-pagination a.active {
+.blog-post-pagination button.active {
   cursor: auto;
 }
-.blog-post-pagination a.active, .blog-post-pagination a:hover {
+.blog-post-pagination button.active, .blog-post-pagination button:hover {
   background: #0c235e;
   color: #fff;
 }
-.blog-post-pagination a + a {
+.blog-post-pagination button + button {
   margin-left: 10px;
 }
 

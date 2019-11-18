@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import { IsUserLoggedIn, SignOut } from 'components/Common';
+import { IsUserLoggedIn } from 'components/Common';
 import { withFirebase } from "components/Firebase";
 import { compose } from 'recompose';
 
@@ -45,7 +45,7 @@ class HeaderBase extends React.Component {
 					<div className="container clearfix">
 
 						<div className="logo-box clearfix">
-							<a className="navbar-brand" href="index.html">
+							<a className="navbar-brand" href="/">
 								<img src={logo} className="main-logo" width="150" alt="Awesome" />
 							</a>
 							<button className="menu-toggler" data-target=".main-navigation">

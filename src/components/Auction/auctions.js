@@ -1,7 +1,6 @@
 import React from 'react';
 import { withFirebase } from 'components/Firebase';
 import { Header, Footer } from 'components/Common';
-import logo from "assets/images/logo-1-1.png";
 import AuctionTile from './_auctionTile';
 import moment from "moment";
 
@@ -70,10 +69,10 @@ class AuctionsBase extends React.Component {
 							<h2 className="inner-banner__title">Subastas</h2>
 							<ul className="thm-breadcrumb">
 								<li className="thm-breadcrumb__item">
-									<a href="#" className="thm-breadcrumb__link">Inicio</a>
+									<a href="/" className="thm-breadcrumb__link">Inicio</a>
 								</li>
 								<li className="thm-breadcrumb__item current">
-									<a href="#" className="thm-breadcrumb__link">Subastas</a>
+									<button className="thm-breadcrumb__link link-button">Subastas</button>
 								</li>
 							</ul>
 						</div>
@@ -84,19 +83,19 @@ class AuctionsBase extends React.Component {
 								{this.renderAuctions()}
 							</div>
 							<div className="blog-post-pagination text-center">
-								<a className="prev" href="#"><i className="fa fa-angle-left"></i></a>
-								<a className="active" href="#">01</a>
-								<a href="#">02</a>
-								<a href="#">03</a>
-								<a href="#">04</a>
-								<a href="#">05</a>
-								<a className="next" href="#"><i className="fa fa-angle-right"></i></a>
+								<button className="link-button prev"><i className="fa fa-angle-left"></i></button>
+								<button className="link-button active">01</button>
+								<button className="link-button">02</button>
+								<button className="link-button">03</button>
+								<button className="link-button">04</button>
+								<button className="link-button">05</button>
+								<button className="link-button next"><i className="fa fa-angle-right"></i></button>
 							</div>
 						</div>
 					</section>
 					<Footer />
 				</div>
-				<a href="#" data-target="html" className="scroll-to-target scroll-to-top"><i className="fa fa-angle-up"></i></a>
+				<button data-target="html" className="scroll-to-target scroll-to-top link-button"><i className="fa fa-angle-up"></i></button>
 			</React.Fragment>
 		)
 	}

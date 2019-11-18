@@ -49,7 +49,7 @@ class AuctionTileBase extends React.Component {
 			return(
 				<React.Fragment>
 					<div>Comienza en: </div>
-					{hours}:{minutes}:{LeftPad(secs)}
+					{LeftPad(hours)}:{LeftPad(minutes)}:{LeftPad(secs)}
 				</React.Fragment>
 			)
 		}
@@ -85,7 +85,7 @@ class AuctionTileBase extends React.Component {
 
 						</div>
 
-						<p className="blog-one__text">{this.props.auction.description}</p>
+						<p className="blog-one__text">{this.props.auction.shortDescription}</p>
 					</div>
 				</div>
 			</div>
