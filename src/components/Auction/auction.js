@@ -20,7 +20,8 @@ class AuctionBase extends React.Component {
 			remainingTime: 0,
 			serverTime: 0,
 			bought: false,
-			bid: false
+			bid: false,
+			canBid: false
 		}
 
 	}
@@ -41,14 +42,53 @@ class AuctionBase extends React.Component {
 		}
 
 		this.interval = setInterval(() => {
-			this.setState({
-				remainingTime: this.state.remainingTime - ONE_TICK
-			});
+			if(this.state.remainingTime <= 0) {
+				const remainingTimeHash = this.getRemainingTime();
+				this.setState(remainingTimeHash);
+			} else {
+				this.setState({
+					remainingTime: this.state.remainingTime - ONE_TICK,
+					serverTime: this.state.serverTime + ONE_TICK
+				});
+			}
 		}, ONE_TICK);
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.interval);
+	}
+
+	getRemainingTime = () => {
+		const auction = this.state.auction;
+		if(this.state.auction.startingAt) {
+			const openingTime = moment.unix(auction.startingAt.seconds);
+			const closingTime = moment.unix(auction.endingAt.seconds);
+			const currentTime = this.state.serverTime;
+
+			let remainingTime = 0;
+			let canBid = false;
+			let response = {};
+
+			if(openingTime - currentTime <= 0)
+			{
+				response = {
+					canBid: true,
+					remainingTime: closingTime.diff(currentTime)
+				};
+			} else {
+				response = {
+					canBid: false,
+					remainingTime: openingTime.diff(currentTime)
+				};
+			}
+
+			return response;
+		}
+
+		return {
+			canBid: false,
+			remainingTime: 0
+		}
 	}
 
 	getAuction = () => {
@@ -57,28 +97,30 @@ class AuctionBase extends React.Component {
 		this.props.firebase.getAuction(id).then((res) => {
 			if(res.exists) {
 				const auction = res.data();
-
-				const closingTime = moment.unix(auction.endingAt.seconds);
-				const closingDiffTime = closingTime.diff(this.state.serverTime);
 				const userId = this.props.firebase.getUserId();
+				const remainingTimeHash = this.getRemainingTime();
 
 				let bought = false;
 				let bid = false;
 
-				if(auction.entries.includes(userId)) {
+				if(auction.entries.includes(userId) || auction.tokens === "0") {
 					bought = true;
+
 					if(auction.bids.includes(userId)) {
 						bid = true;
 					}
 				}
 
+
 				this.setState({
 					auction: auction,
-					remainingTime: closingDiffTime,
+					remainingTime: remainingTimeHash.remainingTime,
 					id: id,
 					bought: bought,
-					bid: bid
+					bid: bid,
+					canBid: remainingTimeHash.canBid
 				});
+				console.log(this.state);
 				// Get the downloadURL to display image
 				this.props.firebase.getFile(auction.imageUrl).then((url) => {
 					this.setState({
@@ -198,7 +240,14 @@ class AuctionBase extends React.Component {
 													)
 													:
 													(
-														<div className="comprarBtn" onClick={this.bid}>Subastar</div>
+														this.state.canBid ?
+														(
+															<div className="comprarBtn" onClick={this.bid}>Subastar</div>
+														)
+														:
+														(
+															<div className="comprarBtn disabled">Subastar</div>
+														)
 													)
 												)
 												:
