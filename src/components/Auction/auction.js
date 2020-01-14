@@ -5,6 +5,11 @@ import { ToCurrency, SecondsToTimeFormat } from "utils/utils";
 import moment from "moment";
 
 const ONE_TICK = 1000;
+const RUNNING_STATES = {
+	"HAS_NOT_STARTED": 0,
+	"RUNNING": 1,
+	"CLOSED": 2
+};
 
 class AuctionBase extends React.Component {
 	constructor(props) {
@@ -22,7 +27,7 @@ class AuctionBase extends React.Component {
 			bought: false,
 			bid: false,
 			canBid: false,
-			currentPrice: 0
+			runningState: RUNNING_STATES["HAS_NOT_STARTED"]
 		}
 
 	}
@@ -50,7 +55,6 @@ class AuctionBase extends React.Component {
 				this.setState({
 					remainingTime: this.state.remainingTime - ONE_TICK,
 					serverTime: this.state.serverTime + ONE_TICK,
-					currentPrice: parseFloat(this.state.auction.endPrice) + (((this.state.remainingTime - ONE_TICK) / ONE_TICK) * this.state.auction.priceDecreaseRate)
 				});
 			}
 		}, ONE_TICK);
@@ -82,14 +86,14 @@ class AuctionBase extends React.Component {
 					response = {
 						canBid: false,
 						remainingTime: 0,
-						currentPrice: auction.endPrice
+						runningState: RUNNING_STATES["CLOSED"]
 					}
 				} else {
 					// Auction running
 					response = {
 						canBid: true,
 						remainingTime: closingTime.diff(currentTime),
-						currentPrice: parseFloat(auction.endPrice) + ((remainingTime / ONE_TICK) * auction.priceDecreaseRate)
+						runningState: RUNNING_STATES["RUNNING"]
 					};
 				}
 			} else {
@@ -97,7 +101,7 @@ class AuctionBase extends React.Component {
 				response = {
 					canBid: false,
 					remainingTime: openingTime.diff(currentTime),
-					currentPrice: auction.startingPrice
+					runningState: RUNNING_STATES["HAS_NOT_STARTED"]
 				};
 			}
 
@@ -146,7 +150,6 @@ class AuctionBase extends React.Component {
 								const remainingTime = closingTime.diff(biddingTime);
 								this.setState({
 									remainingTime: remainingTime,
-									currentPrice: parseFloat(auction.endPrice) + ((remainingTime / ONE_TICK) * auction.priceDecreaseRate)
 								});
 							})
 						}).catch((err) => {
@@ -162,7 +165,6 @@ class AuctionBase extends React.Component {
 					bought: bought,
 					bid: bid,
 					canBid: remainingTimeHash.canBid,
-					currentPrice: remainingTimeHash.price,
 					pinned: pinned
 				});
 				// Get the downloadURL to display image
@@ -177,6 +179,18 @@ class AuctionBase extends React.Component {
 		}).catch((err) => {
 			console.log(err);
 		});
+	}
+
+	getCurrentPrice = () => {
+		let currentPrice = 0;
+		if(this.state.runningState === RUNNING_STATES["HAS_NOT_STARTED"]) {
+			currentPrice = this.state.auction.startingPrice;
+		} else if(this.state.runningState === RUNNING_STATES["RUNNING"]) {
+			currentPrice = parseFloat(this.state.auction.endPrice) + (((this.state.remainingTime - ONE_TICK) / ONE_TICK) * this.state.auction.priceDecreaseRate);
+		} else if(this.state.runningState === RUNNING_STATES["CLOSED"]) {
+			currentPrice = this.state.auction.endPrice;
+		}
+		return ToCurrency(currentPrice);
 	}
 
 	toggleBookmark = () => {
@@ -280,7 +294,7 @@ class AuctionBase extends React.Component {
 											<div className="countdown mb-1">{SecondsToTimeFormat(this.state.remainingTime)}</div>
 											<hr />
 											<h3 className="sidebar__title">Precio</h3>
-											<div className="price mb-1">{ToCurrency(this.state.currentPrice)}</div>
+											<div className="price mb-1">{this.getCurrentPrice()}</div>
 											{
 												this.state.bought ?
 												(
@@ -302,7 +316,14 @@ class AuctionBase extends React.Component {
 												)
 												:
 												(
-													<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
+													this.state.canBid ?
+													(
+														<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
+													)
+													:
+													(
+														<div className="comprarBtn disabled">Comprar</div>
+													)
 												)
 											}
 
