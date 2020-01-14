@@ -18,7 +18,9 @@ class AuctionBase extends React.Component {
 			pinned: false,
 			imageURL: '',
 			remainingTime: 0,
-			serverTime: 0
+			serverTime: 0,
+			bought: false,
+			bid: false
 		}
 
 	}
@@ -58,10 +60,24 @@ class AuctionBase extends React.Component {
 
 				const closingTime = moment.unix(auction.endingAt.seconds);
 				const closingDiffTime = closingTime.diff(this.state.serverTime);
+				const userId = this.props.firebase.getUserId();
+
+				let bought = false;
+				let bid = false;
+
+				if(auction.entries.includes(userId)) {
+					bought = true;
+					if(auction.bids.includes(userId)) {
+						bid = true;
+					}
+				}
 
 				this.setState({
 					auction: auction,
-					remainingTime: closingDiffTime
+					remainingTime: closingDiffTime,
+					id: id,
+					bought: bought,
+					bid: bid
 				});
 				// Get the downloadURL to display image
 				this.props.firebase.getFile(auction.imageUrl).then((url) => {
@@ -84,6 +100,20 @@ class AuctionBase extends React.Component {
 		});
 	}
 
+	buyEntry = () => {
+		this.props.firebase.buyEntry(this.state.id);
+		this.setState({
+			bought: true
+		});
+	}
+
+	bid = () => {
+		this.props.firebase.bid(this.state.id);
+		this.setState({
+			bid: true
+		});
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -97,11 +127,11 @@ class AuctionBase extends React.Component {
 									{
 										this.state.pinned ?
 										(
-											<i class="fa fa-star"></i>
+											<i className="fa fa-star"></i>
 										)
 										:
 										(
-											<i class="fa fa-star-o"></i>
+											<i className="fa fa-star-o"></i>
 										)
 									}
 								</div>
@@ -159,7 +189,23 @@ class AuctionBase extends React.Component {
 											<hr />
 											<h3 className="sidebar__title">Precio</h3>
 											<div className="price mb-1">{ToCurrency(this.state.auction.startingPrice)}</div>
-											<div className="comprarBtn">Comprar</div>
+											{
+												this.state.bought ?
+												(
+													this.state.bid ?
+													(
+														<div className="comprarBtn disabled">¡Felicidades!</div>
+													)
+													:
+													(
+														<div className="comprarBtn" onClick={this.bid}>Subastar</div>
+													)
+												)
+												:
+												(
+													<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
+												)
+											}
 
 											<div className="chatx mt-4">
 												<hr className="mb-3" />

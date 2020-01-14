@@ -74,6 +74,20 @@ class Firebase {
 		return this.firestore.collection("auctions").where("endingAt", ">=", now).orderBy("endingAt", "asc").get();
 	}
 
+	buyEntry = (auctionId) => {
+		let auctionRef = this.firestore.collection("auctions").doc(auctionId);
+		return auctionRef.update({
+			entries: app.firestore.FieldValue.arrayUnion(this.user.uid)
+		});
+	}
+
+	bid = (auctionId) => {
+		let auctionRef = this.firestore.collection("auctions").doc(auctionId);
+		return auctionRef.update({
+			bids: app.firestore.FieldValue.arrayUnion(this.user.uid)
+		});
+	}
+
 	uploadFile = (fileName, blob) => {
 		console.log(this.storage.ref());
 		return this.storage.ref().child(fileName).put(blob);
@@ -81,6 +95,10 @@ class Firebase {
 
 	getFile = (id) => {
 		return this.storage.ref().child(id).getDownloadURL();
+	}
+
+	getUserId = () => {
+		return this.user.uid;
 	}
 
 }

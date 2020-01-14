@@ -12,3 +12,7 @@
 .link-button:focus {
 text-decoration: none;
 }
+
+.disabled {
+	opacity: 0.5;
+}

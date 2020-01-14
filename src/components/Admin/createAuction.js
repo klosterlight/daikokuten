@@ -18,7 +18,10 @@ class CreateAuctionComponent extends React.Component {
 			imageUrl: '',
 			tokens: 100,
 			startingAt: moment().unix(),
-			endingAt: moment().add(10, "minutes").unix()
+			endingAt: moment().add(10, "minutes").unix(),
+			bids: [],
+			bookmarks: [],
+			entries: []
 		}
 	}
 
