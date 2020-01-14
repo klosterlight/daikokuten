@@ -47,6 +47,13 @@ class AuctionsBase extends React.Component {
 			querySnapshot.forEach((doc) => {
 				let auction = doc.data();
 				auction.id = doc.id;
+				auction.entries = auction.entries || [];
+				console.log(auction);
+				if(auction.entries.includes(this.props.firebase.getUserId()) || auction.tokens === "0") {
+					auction.bought = true;
+				} else {
+					auction.bought = false;
+				}
 
 				auctions.push(auction);
 			});

@@ -66,10 +66,19 @@ class AuctionTileBase extends React.Component {
 						<h3 className="blog-one__title"><a href={`/auction/${this.props.auction.id}`}>{this.props.auction.title}</a></h3>
 						<div className="priceNshit">
 							<h4>{ToCurrency(this.props.auction.startingPrice)}</h4>
-							<span>
-								{this.props.auction.tokens} tokens
-								<div>entrar a la subasta</div>
-							</span>
+							{
+								this.props.auction.bought ?
+								(
+									<span className="ready">Listo<div>para entrar</div></span>
+								)
+								:
+								(
+									<span>
+										{this.props.auction.tokens} tokens
+										<div>entrar a la subasta</div>
+									</span>
+								)
+							}
 						</div>
 
 						<div className="timenshit">
