@@ -102,8 +102,19 @@ class Firebase {
 			.get();
 	}
 
+	addBookmark = (auctionId) => {
+		this.firestore.collection("auctions").doc(auctionId).update({
+			bookmarks: app.firestore.FieldValue.arrayUnion(this.user.uid)
+		});
+	}
+
+	removeBookmark = (auctionId) => {
+		this.firestore.collection("auctions").doc(auctionId).update({
+			bookmarks: app.firestore.FieldValue.arrayRemove(this.user.uid)
+		});
+	}
+
 	uploadFile = (fileName, blob) => {
-		console.log(this.storage.ref());
 		return this.storage.ref().child(fileName).put(blob);
 	}
 

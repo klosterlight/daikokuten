@@ -123,6 +123,11 @@ class AuctionBase extends React.Component {
 
 				let bought = false;
 				let bid = false;
+				let pinned = false;
+
+				if(auction.bookmarks.includes(userId)) {
+					pinned = true;
+				}
 
 				if(auction.entries.includes(userId) || auction.tokens === "0") {
 					bought = true;
@@ -157,7 +162,8 @@ class AuctionBase extends React.Component {
 					bought: bought,
 					bid: bid,
 					canBid: remainingTimeHash.canBid,
-					currentPrice: remainingTimeHash.price
+					currentPrice: remainingTimeHash.price,
+					pinned: pinned
 				});
 				// Get the downloadURL to display image
 				this.props.firebase.getFile(auction.imageUrl).then((url) => {
@@ -174,7 +180,13 @@ class AuctionBase extends React.Component {
 	}
 
 	toggleBookmark = () => {
-		// TODO: Save User preference on pinned
+		const auctionId = this.props.match.params.id;
+		// Save User bookmark on auction
+		if(this.state.pinned) {
+			this.props.firebase.removeBookmark(auctionId);
+		} else {
+			this.props.firebase.addBookmark(auctionId);
+		}
 		this.setState({
 			pinned: !this.state.pinned
 		});
