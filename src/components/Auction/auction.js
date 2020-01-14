@@ -21,7 +21,8 @@ class AuctionBase extends React.Component {
 			serverTime: 0,
 			bought: false,
 			bid: false,
-			canBid: false
+			canBid: false,
+			currentPrice: 0
 		}
 
 	}
@@ -48,7 +49,8 @@ class AuctionBase extends React.Component {
 			} else {
 				this.setState({
 					remainingTime: this.state.remainingTime - ONE_TICK,
-					serverTime: this.state.serverTime + ONE_TICK
+					serverTime: this.state.serverTime + ONE_TICK,
+					currentPrice: parseFloat(this.state.auction.endPrice) + ((this.state.remainingTime / ONE_TICK) * this.state.auction.priceDecreaseRate)
 				});
 			}
 		}, ONE_TICK);
@@ -60,10 +62,13 @@ class AuctionBase extends React.Component {
 
 	getRemainingTime = () => {
 		const auction = this.state.auction;
+		// Auction has loaded
 		if(this.state.auction.startingAt) {
 			const openingTime = moment.unix(auction.startingAt.seconds);
 			const closingTime = moment.unix(auction.endingAt.seconds);
 			const currentTime = this.state.serverTime;
+
+			let price = this.state.startingPrice;
 
 			let remainingTime = 0;
 			let canBid = false;
@@ -71,23 +76,39 @@ class AuctionBase extends React.Component {
 
 			if(openingTime - currentTime <= 0)
 			{
-				response = {
-					canBid: true,
-					remainingTime: closingTime.diff(currentTime)
-				};
+				remainingTime = closingTime - currentTime;
+				if(remainingTime <= 0) {
+					// Auction has closed
+					response = {
+						canBid: false,
+						remainingTime: 0,
+						currentPrice: auction.endPrice
+					}
+				} else {
+					// Auction running
+					response = {
+						canBid: true,
+						remainingTime: closingTime.diff(currentTime),
+						currentPrice: parseFloat(auction.endPrice) + ((remainingTime / ONE_TICK) * auction.priceDecreaseRate)
+					};
+				}
 			} else {
+				// Auction has not started
 				response = {
 					canBid: false,
-					remainingTime: openingTime.diff(currentTime)
+					remainingTime: openingTime.diff(currentTime),
+					currentPrice: auction.startingPrice
 				};
 			}
 
 			return response;
 		}
 
+		// Auction still not loaded
 		return {
 			canBid: false,
-			remainingTime: 0
+			remainingTime: 0,
+			price: 0
 		}
 	}
 
@@ -111,16 +132,15 @@ class AuctionBase extends React.Component {
 					}
 				}
 
-
 				this.setState({
 					auction: auction,
 					remainingTime: remainingTimeHash.remainingTime,
 					id: id,
 					bought: bought,
 					bid: bid,
-					canBid: remainingTimeHash.canBid
+					canBid: remainingTimeHash.canBid,
+					currentPrice: remainingTimeHash.price
 				});
-				console.log(this.state);
 				// Get the downloadURL to display image
 				this.props.firebase.getFile(auction.imageUrl).then((url) => {
 					this.setState({
@@ -230,7 +250,7 @@ class AuctionBase extends React.Component {
 											<div className="countdown mb-1">{SecondsToTimeFormat(this.state.remainingTime)}</div>
 											<hr />
 											<h3 className="sidebar__title">Precio</h3>
-											<div className="price mb-1">{ToCurrency(this.state.auction.startingPrice)}</div>
+											<div className="price mb-1">{ToCurrency(this.state.currentPrice)}</div>
 											{
 												this.state.bought ?
 												(
