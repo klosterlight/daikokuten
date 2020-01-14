@@ -50,7 +50,7 @@ class AuctionBase extends React.Component {
 				this.setState({
 					remainingTime: this.state.remainingTime - ONE_TICK,
 					serverTime: this.state.serverTime + ONE_TICK,
-					currentPrice: parseFloat(this.state.auction.endPrice) + ((this.state.remainingTime / ONE_TICK) * this.state.auction.priceDecreaseRate)
+					currentPrice: parseFloat(this.state.auction.endPrice) + (((this.state.remainingTime - ONE_TICK) / ONE_TICK) * this.state.auction.priceDecreaseRate)
 				});
 			}
 		}, ONE_TICK);
@@ -129,6 +129,24 @@ class AuctionBase extends React.Component {
 
 					if(auction.bids.includes(userId)) {
 						bid = true;
+
+						// Get the user bid
+						this.props.firebase.getUserBid(id).then((response) => {
+							response.forEach((doc) => {
+								const userBid = doc.data();
+								clearInterval(this.interval);
+								// Set the bid values
+								const closingTime = moment.unix(auction.endingAt.seconds);
+								const biddingTime = moment.unix(userBid.bidAt.seconds);
+								const remainingTime = closingTime.diff(biddingTime);
+								this.setState({
+									remainingTime: remainingTime,
+									currentPrice: parseFloat(auction.endPrice) + ((remainingTime / ONE_TICK) * auction.priceDecreaseRate)
+								});
+							})
+						}).catch((err) => {
+							console.log(err);
+						})
 					}
 				}
 
@@ -173,7 +191,7 @@ class AuctionBase extends React.Component {
 		this.props.firebase.bid(this.state.id);
 		this.setState({
 			bid: true
-		});
+		}, clearInterval(this.interval));
 	}
 
 	render() {

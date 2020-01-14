@@ -82,10 +82,24 @@ class Firebase {
 	}
 
 	bid = (auctionId) => {
-		let auctionRef = this.firestore.collection("auctions").doc(auctionId);
-		return auctionRef.update({
+		const auctionRef = this.firestore.collection("auctions").doc(auctionId);
+
+		auctionRef.update({
 			bids: app.firestore.FieldValue.arrayUnion(this.user.uid)
 		});
+
+		this.firestore.collection("userBids").add({
+			userId: this.user.uid,
+			auctionId: auctionId,
+			bidAt: app.firestore.FieldValue.serverTimestamp()
+		});
+	}
+
+	getUserBid = (auctionId) => {
+		return this.firestore.collection("userBids")
+			.where("userId", "==", this.user.uid)
+			.where("auctionId", "==", auctionId)
+			.get();
 	}
 
 	uploadFile = (fileName, blob) => {
