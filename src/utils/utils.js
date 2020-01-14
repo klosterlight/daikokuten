@@ -21,3 +21,12 @@ export const ToDateFormat = (value, format = "DD MMMM YYYY") => {
 export const ToTimeFormat = (value, format = "HH:mm") => {
 	return moment.unix(value).format(format);
 }
+
+export const SecondsToTimeFormat = (value) => {
+	let secs = parseInt(value / 1000);
+	let hours = parseInt( secs / 3600 );
+	secs = secs % 3600;
+	let minutes = parseInt( secs / 60 );
+	secs = secs % 60;
+	return `${LeftPad(hours)}:${LeftPad(minutes)}:${LeftPad(secs)}`
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { withFirebase } from "components/Firebase";
-import { ToCurrency, ToDateFormat, ToTimeFormat, LeftPad } from "utils/utils";
+import { ToCurrency, ToDateFormat, ToTimeFormat, SecondsToTimeFormat } from "utils/utils";
 import moment from "moment";
 
 class AuctionTileBase extends React.Component {
@@ -39,19 +39,17 @@ class AuctionTileBase extends React.Component {
 		if(this.state.isClosed) {
 			return "Cerrado";
 		} else {
-
-			let secs = parseInt(remainingTime / 1000);
-			let hours = parseInt( secs / 3600 );
-			secs = secs % 3600;
-			let minutes = parseInt( secs / 60 );
-			secs = secs % 60;
-
-			return(
-				<React.Fragment>
-					<div>Comienza en: </div>
-					{LeftPad(hours)}:{LeftPad(minutes)}:{LeftPad(secs)}
-				</React.Fragment>
-			)
+			if(remainingTime <= 0) {
+				return(
+					<div>En curso</div>
+				);
+			} else {return(
+					<React.Fragment>
+						<div>Comienza en: </div>
+						{SecondsToTimeFormat(remainingTime)}
+					</React.Fragment>
+				);
+			}
 		}
 	}
 
@@ -61,11 +59,11 @@ class AuctionTileBase extends React.Component {
 				<div className="blog-one__single">
 					<div className="blog-one__image">
 						<img width="370" height="263" src={this.state.imageUrl} alt="Limbo" />
-						<a href="room.html"><i className="appyn-icon-plus-symbol"></i></a>
+						<a href={`/auction/${this.props.auction.id}`}><i className="appyn-icon-plus-symbol"></i></a>
 					</div>
 					<div className="blog-one__content">
 
-						<h3 className="blog-one__title"><a href="room.html">{this.props.auction.title}</a></h3>
+						<h3 className="blog-one__title"><a href={`/auction/${this.props.auction.id}`}>{this.props.auction.title}</a></h3>
 						<div className="priceNshit">
 							<h4>{ToCurrency(this.props.auction.startingPrice)}</h4>
 							<span>

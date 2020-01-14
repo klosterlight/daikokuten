@@ -45,7 +45,10 @@ class AuctionsBase extends React.Component {
 		// this.props.firebase.getAuctions().then((querySnapshot) => {
 			let auctions = [];
 			querySnapshot.forEach((doc) => {
-				auctions.push(doc.data());
+				let auction = doc.data();
+				auction.id = doc.id;
+
+				auctions.push(auction);
 			});
 			this.setState({
 				auctions: auctions

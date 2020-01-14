@@ -65,6 +65,10 @@ class Firebase {
 		return this.firestore.collection("auctions").orderBy("createdAt", "desc").get();
 	}
 
+	getAuction = (auctionId) => {
+		return this.firestore.collection("auctions").doc(auctionId).get();
+	}
+
 	getViableAuctions = () => {
 		const now = new Date();
 		return this.firestore.collection("auctions").where("endingAt", ">=", now).orderBy("endingAt", "asc").get();
@@ -76,8 +80,6 @@ class Firebase {
 	}
 
 	getFile = (id) => {
-		console.log(id);
-		console.log('getting file');
 		return this.storage.ref().child(id).getDownloadURL();
 	}
 
