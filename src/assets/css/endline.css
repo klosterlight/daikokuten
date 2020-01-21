@@ -16,3 +16,11 @@ text-decoration: none;
 .disabled {
 	opacity: 0.5;
 }
+
+.odometer-inside:before {
+	content: "$";
+}
+
+.sidebar__single:not(.sidebar__search) {
+	padding: 40px !important;
+}

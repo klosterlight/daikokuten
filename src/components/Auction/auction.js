@@ -3,6 +3,8 @@ import { withFirebase } from 'components/Firebase';
 import { Header, Footer } from 'components/Common';
 import { ToCurrency, SecondsToTimeFormat } from "utils/utils";
 import moment from "moment";
+import Odometer from 'react-odometerjs';
+import 'odometer/themes/odometer-theme-default.css';
 
 const ONE_TICK = 1000;
 const TICK_MONEY_EVERY = 2;
@@ -195,7 +197,7 @@ class AuctionBase extends React.Component {
 		} else if(this.state.runningState === RUNNING_STATES["CLOSED"]) {
 			currentPrice = this.state.auction.endPrice;
 		}
-		return ToCurrency(currentPrice);
+		return currentPrice;
 	}
 
 	toggleBookmark = () => {
@@ -308,7 +310,7 @@ class AuctionBase extends React.Component {
 											<div className="countdown mb-1">{SecondsToTimeFormat(this.state.remainingTime)}</div>
 											<hr />
 											<h3 className="sidebar__title">Precio</h3>
-											<div className="price mb-1">{this.getCurrentPrice()}</div>
+											<div className="price mb-1"><Odometer value={this.getCurrentPrice()} format="(,ddd)" /></div>
 											{
 												this.state.bought ?
 												(
