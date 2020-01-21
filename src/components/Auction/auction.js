@@ -5,6 +5,7 @@ import { ToCurrency, SecondsToTimeFormat } from "utils/utils";
 import moment from "moment";
 
 const ONE_TICK = 1000;
+const TICK_MONEY_EVERY = 2;
 const RUNNING_STATES = {
 	"HAS_NOT_STARTED": 0,
 	"RUNNING": 1,
@@ -27,7 +28,7 @@ class AuctionBase extends React.Component {
 			bought: false,
 			bid: false,
 			canBid: false,
-			runningState: RUNNING_STATES["HAS_NOT_STARTED"]
+			runningState: RUNNING_STATES["HAS_NOT_STARTED"],
 		}
 
 	}
@@ -183,7 +184,14 @@ class AuctionBase extends React.Component {
 		if(this.state.runningState === RUNNING_STATES["HAS_NOT_STARTED"]) {
 			currentPrice = this.state.auction.startingPrice;
 		} else if(this.state.runningState === RUNNING_STATES["RUNNING"]) {
-			currentPrice = parseFloat(this.state.auction.endPrice) + (((this.state.remainingTime - ONE_TICK) / ONE_TICK) * this.state.auction.priceDecreaseRate);
+			const remainingTimeInSeconds = ((this.state.remainingTime - ONE_TICK) / ONE_TICK).toFixed(0);
+			if( remainingTimeInSeconds % TICK_MONEY_EVERY === 0) {
+				currentPrice = parseFloat(this.state.auction.endPrice) + (remainingTimeInSeconds * this.state.auction.priceDecreaseRate);
+			} else {
+				let stoppedTime = parseInt(remainingTimeInSeconds) + parseInt((TICK_MONEY_EVERY - (remainingTimeInSeconds % TICK_MONEY_EVERY)));
+				let price = stoppedTime * this.state.auction.priceDecreaseRate;
+				currentPrice = parseFloat(this.state.auction.endPrice) + price;
+			}
 		} else if(this.state.runningState === RUNNING_STATES["CLOSED"]) {
 			currentPrice = this.state.auction.endPrice;
 		}
