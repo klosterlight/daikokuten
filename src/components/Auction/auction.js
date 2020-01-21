@@ -72,10 +72,7 @@ class AuctionBase extends React.Component {
 			const closingTime = moment.unix(auction.endingAt.seconds);
 			const currentTime = this.state.serverTime;
 
-			let price = this.state.startingPrice;
-
 			let remainingTime = 0;
-			let canBid = false;
 			let response = {};
 
 			if(openingTime - currentTime <= 0)
@@ -220,6 +217,15 @@ class AuctionBase extends React.Component {
 		}, clearInterval(this.interval));
 	}
 
+	getTimeLabel = () => {
+		if(this.state.runningState === RUNNING_STATES["RUNNING"])
+			return "TIEMPO";
+		if(this.state.runningState === RUNNING_STATES["HAS_NOT_STARTED"])
+			return "COMIENZA EN";
+		if(this.state.runningState === RUNNING_STATES["CLOSED"])
+			return "CERRADA";
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -261,7 +267,7 @@ class AuctionBase extends React.Component {
 								<div className="col-lg-8">
 									<div className="blog-details__content">
 										<div className="blog-details__image">
-											<img width="770" src={this.state.imageUrl} alt="Awesome Image"/>
+											<img width="770" src={this.state.imageUrl} alt="Awesome Auction"/>
 										</div>
 
 										<div className="flexCol">
@@ -290,7 +296,7 @@ class AuctionBase extends React.Component {
 								<div className="col-lg-4 strickyx">
 									<div className="sidebar ">
 										<div className="sidebar__single sidebar__category">
-											<h3 className="sidebar__title">Tiempo</h3>
+											<h3 className="sidebar__title">{this.getTimeLabel()}</h3>
 											<div className="countdown mb-1">{SecondsToTimeFormat(this.state.remainingTime)}</div>
 											<hr />
 											<h3 className="sidebar__title">Precio</h3>
@@ -315,16 +321,7 @@ class AuctionBase extends React.Component {
 													)
 												)
 												:
-												(
-													this.state.canBid ?
-													(
-														<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
-													)
-													:
-													(
-														<div className="comprarBtn disabled">Comprar</div>
-													)
-												)
+												<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
 											}
 
 											<div className="chatx mt-4">
