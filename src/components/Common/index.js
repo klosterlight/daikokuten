@@ -6,5 +6,7 @@ import CurrentUser, {IsUserLoggedIn } from './session';
 import CountdownTimer from './countdownTimer';
 import Landing from './landing';
 import NotFound from './notFound';
+import Comments from './comments';
+import Comment from './comment';
 export default RoomHeader;
-export { LogIn, CurrentUser, IsUserLoggedIn, CountdownTimer, Landing, NotFound, Header, Footer };
+export { LogIn, CurrentUser, IsUserLoggedIn, CountdownTimer, Landing, NotFound, Header, Footer, Comments, Comment };

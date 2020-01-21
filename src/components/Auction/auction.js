@@ -1,6 +1,6 @@
 import React from "react";
 import { withFirebase } from 'components/Firebase';
-import { Header, Footer } from 'components/Common';
+import { Header, Footer, Comments } from 'components/Common';
 import { ToCurrency, SecondsToTimeFormat } from "utils/utils";
 import moment from "moment";
 import Odometer from 'react-odometerjs';
@@ -333,39 +333,7 @@ class AuctionBase extends React.Component {
 												:
 												<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
 											}
-
-											<div className="chatx mt-4">
-												<hr className="mb-3" />
-												<div className="comment-one">
-													<div className="comment-one__single">
-														<div className="comment-one__image">
-															<div className="inner-block">
-
-															</div>
-														</div>
-														<div className="comment-one__content">
-															<div className="comment-one__content-top">
-																<div className="comment-one__top-left">
-																	<h3 className="comment-one__author">Laquanda Bachmeier</h3>
-																	<p className="comment-one__date">20 April, 2019
-																		<span className="comment-one__date-sep">.</span>
-																		4:20 pm</p>
-																	<p className="comment-one__text">Lorem Ipsum is simply dummy text of the rinting and typesetting.</p>
-																</div>
-
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<form action="#" className="reply-form">
-												<div className="row">
-													<div className="col-lg-12">
-														<textarea placeholder="Mensaje" className="reply-form__field"></textarea>
-														<button className="reply-form__btn thm-btn smllBtn" type="submit">Enviar</button>
-													</div>
-												</div>
-											</form>
+											<Comments auctionId={this.props.match.params.id} />
 										</div>
 									</div>
 								</div>

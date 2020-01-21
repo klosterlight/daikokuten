@@ -114,6 +114,13 @@ class Firebase {
 		});
 	}
 
+	getAuctionBidUsers = (auctionId) => {
+		return this.firestore.collection("userBids")
+			.where("auctionId", "==", auctionId)
+			.orderBy("bidAt", "desc")
+			.get();
+	}
+
 	uploadFile = (fileName, blob) => {
 		return this.storage.ref().child(fileName).put(blob);
 	}
@@ -124,6 +131,18 @@ class Firebase {
 
 	getUserId = () => {
 		return this.user.uid;
+	}
+
+	getMessagesByActionId = (auctionId) => {
+		return this.firestore.collection("auctions").doc(auctionId).collection("messages").orderBy("postedAt", "asc");
+	}
+
+	postMessageOnAuction = (auctionId, message) => {
+		const auctionRef = this.firestore.collection("auctions").doc(auctionId).collection("messages").add({
+			postedAt: app.firestore.FieldValue.serverTimestamp(),
+			message: message,
+			userName: this.user.displayName
+		});
 	}
 
 }
