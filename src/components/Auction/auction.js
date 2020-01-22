@@ -331,7 +331,14 @@ class AuctionBase extends React.Component {
 													)
 												)
 												:
-												<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
+												this.state.runningState === RUNNING_STATES["CLOSED"] ?
+												(
+													<div className="comprarBtn disabled">Comprar</div>
+												)
+												:
+												(
+													<div className="comprarBtn" onClick={this.buyEntry}>Comprar</div>
+												)
 											}
 											<Comments auctionId={this.props.match.params.id} />
 										</div>

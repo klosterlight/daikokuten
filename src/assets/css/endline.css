@@ -24,3 +24,13 @@ text-decoration: none;
 .sidebar__single:not(.sidebar__search) {
 	padding: 40px !important;
 }
+
+.comment-one {
+	margin-bottom: 2em;
+}
+
+.chatx-endline {
+	overflow-y: scroll;
+	height: 50vh;
+	margin-bottom: 2em;
+}
