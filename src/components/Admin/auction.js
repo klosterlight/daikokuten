@@ -236,6 +236,10 @@ class AuctionBase extends React.Component {
 			return "CERRADA";
 	}
 
+	stop = () => {
+		this.props.firebase.stopAuction(this.props.match.params.id);
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -301,6 +305,7 @@ class AuctionBase extends React.Component {
 											<hr />
 											<h3 className="sidebar__title">Precio</h3>
 											<div className="price mb-1"><Odometer value={this.getCurrentPrice()} format="(,ddd)" /></div>
+											<div className="comprarBtn" onClick={this.stop}>Parar!</div>
 											<Comments auctionId={this.props.match.params.id} />
 										</div>
 									</div>

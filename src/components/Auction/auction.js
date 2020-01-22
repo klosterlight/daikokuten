@@ -61,6 +61,18 @@ class AuctionBase extends React.Component {
 				});
 			}
 		}, ONE_TICK);
+
+		this.props.firebase.listenToStopAuction(this.props.match.params.id).onSnapshot((doc) => {
+			const auction = doc.data();
+			if(auction.stopped) {
+				clearInterval(this.interval);
+				this.setState({
+					remainingTime: 0,
+					runningState: RUNNING_STATES["CLOSED"]
+				});
+				alert("Se ha terminado esta subasta");
+			}
+		});
 	}
 
 	componentWillUnmount() {

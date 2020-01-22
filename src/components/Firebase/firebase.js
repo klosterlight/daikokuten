@@ -70,6 +70,16 @@ class Firebase {
 		return this.firestore.collection("auctions").doc(auctionId).get();
 	}
 
+	stopAuction = (auctionId) => {
+		return this.firestore.collection("auctions").doc(auctionId).set({
+			stopped: true
+		}, { merge: true });
+	}
+
+	listenToStopAuction = (auctionId) => {
+		return this.firestore.collection("auctions").doc(auctionId);
+	}
+
 	getViableAuctions = () => {
 		const now = new Date();
 		return this.firestore.collection("auctions").where("endingAt", ">=", now).orderBy("endingAt", "asc").get();

@@ -39,6 +39,8 @@ class CreateAuctionComponent extends React.Component {
 		auctionParams.createdAt = new Date();
 		auctionParams.updatedAt = new Date();
 
+		auctionParams.stopped = false;
+
 		// TODO: Add server side validations
 		// TODO: Add client side validations
 		this.props.firebase.addAuction(auctionParams).then((res) => {
