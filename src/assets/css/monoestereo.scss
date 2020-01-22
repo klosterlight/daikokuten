@@ -1,0 +1,175 @@
+$green: #87c143;
+$blue: #0c235e;
+
+.priceNshit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .5rem;
+
+    h4 {
+        font-size: 1.8rem;
+    }
+
+    span {
+        border: 1px solid gray;
+        line-height: .8rem;
+        padding: .3rem 1.2rem;
+        font-size: 1rem;
+        border-radius: 3rem;
+        text-align: center;
+
+        div {
+            font-size: .7rem;
+        }
+    }
+
+    .ready {
+        background: $green;
+        color: $blue;
+        border: none;
+    }
+}
+
+.comprarBtn{
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background-color: $green;
+    color: white;
+    border-radius: 3rem;
+    margin-top: 3rem;
+}
+
+.countdown{
+    font-size: 4.55rem;
+    line-height: 5.2rem;
+    text-align: center;  
+}
+
+.price{
+    font-size: 4.5rem;
+    line-height: 5.2rem;
+    text-align: center;  
+}
+
+.stickyx{
+    position: sticky;
+    top: 150px;
+}
+
+.smllBtn{
+    padding: .5rem 2rem;
+}
+
+.imgOption {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    height: 140px;
+    background-color: white;
+    margin: .5rem;
+    position: relative;
+    cursor: pointer;
+    img{
+        width: 100%;
+    }
+    .check{
+        position: absolute; 
+        left: 50%;
+        top: 50%;
+        width: 45px;
+    }
+}
+
+.optArea{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.toks{
+    z-index: 3;
+    h3,h4{
+
+        text-align: center;
+    }
+}
+
+.app-screen-one__carousel:after {
+    content: url(../images/click.png);
+    position: absolute;
+    bottom: 150px;
+    right: 40%;
+    height: 113px;
+    width: 113px;
+   
+    z-index: 1000;
+}
+
+.timenshit{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0rem;
+    color: #87c143;
+    .fecha{
+        div{
+            font-size: .8rem;
+        }
+        display: flex;
+        flex-direction: column;
+        font-size: 1.4rem;
+        line-height: 1rem;
+  
+    }
+    .falta{
+        div{
+            font-size: .8rem;
+        }
+        line-height: 1rem;
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        display: flex; 
+        flex-direction:  column;
+        
+    }
+
+}
+.blog-one__title{
+    text-align: center;
+    font-size: 1.8rem;
+}
+.blog-one__image{
+    margin-bottom: 10px;;
+}
+.blog-one__text{
+    line-height: 1.3rem;
+}
+
+.blog-one__content{
+    padding: 0rem 1rem;
+}
+
+.roomProduct{
+    display: flex;
+    justify-content: center; 
+
+    i{
+        color: white; 
+        font-size: 1.5rem;
+    }
+}
+
+
+.flexCol{
+    display: flex;
+
+
+    i{
+        margin-right: .5rem
+    }
+}

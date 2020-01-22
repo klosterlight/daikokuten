@@ -17,12 +17,8 @@ admin.initializeApp(functions.config().firebase);
 //   res.redirect(303, snapshot.ref.toString());
 // });
 
-exports.logBid = functions.database.ref('/rooms/{roomId}/bids/{bidId}').onCreate((snapshot, context) => {
-  const bid = snapshot.val();
-
-  return admin.database().ref(`/rooms/${context.params.roomId}/messages`).push({
-    text: `El usuario ${bid.displayName} ha hecho una puja`,
-    displayName: 'SYSTEM',
-    timestamp: admin.database.ServerValue.TIMESTAMP
-  });
-})
+exports.intializeUserTokens = functions.auth.user().onCreate((user) => {
+	admin.firestore().collection('users').doc(user.uid).set({
+		tokens: 1000
+	});
+});

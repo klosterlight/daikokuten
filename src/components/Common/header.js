@@ -1,64 +1,91 @@
-import React from "react";
-import CurrentUser from './session';
-import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
-import { withFirebase } from '../Firebase';
+import React from 'react';
 import { withRouter } from "react-router-dom";
-import * as ROUTES from '../../constants/routes';
-import moment from "moment";
+import { IsUserLoggedIn } from 'components/Common';
+import { withFirebase } from "components/Firebase";
+import { compose } from 'recompose';
 
-const TIME_FORMAT = "hh:mm:ss a";
-const ONE_TICK = 1000;
+import logo from "assets/images/logo-1-1.png";
 
-class HeaderForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      displayName: ""
-    };
-  }
-  componentDidMount() {
-    const currentUser = CurrentUser();
-    if(currentUser) {
-      this.setState({
-        displayName: currentUser.displayName
-      });
-    }
-    this.props.firebase.serverTime().on('value', (offset) => {
-      const offsetVal = offset.val() || 0;
-      const currentServerTime = moment() + offsetVal;
-      this.currentServerTime = currentServerTime;
-      return 0;
-    });
-  }
-  signOut = () => {
-    this.props.firebase.signOut();
-    this.props.history.push(ROUTES.LOGIN);
-  }
-  getCurrentTime = () => {
-    const currentServerTime = this.currentServerTime + ONE_TICK;
-    const momentCurrentServerTime = moment(currentServerTime);
-    if(momentCurrentServerTime.isValid()) {
-      this.currentServerTime = currentServerTime;
-      return moment(currentServerTime).format(TIME_FORMAT);
-    } else {
-      return "Loading...";
-    }
-  }
-  render() {
-    return (
-      <Row>
-        <span>
-          Hola {this.state.displayName}!
-        </span>
-        <div>
-          {this.getCurrentTime()}
-        </div>
-        <Button onClick={this.signOut}>Salir!</Button>
-      </Row>
-    )
-  }
+class HeaderBase extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			sessionMessage: ''
+		}
+	}
+
+	componentDidMount() {
+		let message = '';
+		if(IsUserLoggedIn()) {
+			message = 'Salir!';
+		} else {
+			message = 'pre-registro';
+		}
+		this.setState({
+			sessionMessage: message
+		});
+	}
+
+	sessionAction() {
+		let message = '';
+		if(IsUserLoggedIn()) {
+			this.props.firebase.signOut();
+			message = 'pre-registro';
+			this.setState({
+				sessionMessage: message
+			});
+		} else {
+			this.props.history.push('/login');
+		}
+	}
+	render() {
+		return(
+			<header className="site-header header-one ">
+				<nav className="navbar navbar-expand-lg navbar-light header-navigation stricky">
+					<div className="container clearfix">
+
+						<div className="logo-box clearfix">
+							<a className="navbar-brand" href="/">
+								<img src={logo} className="main-logo" width="150" alt="Awesome" />
+							</a>
+							<button className="menu-toggler" data-target=".main-navigation">
+								<span className="fa fa-bars"></span>
+							</button>
+						</div>
+
+						<div className="main-navigation">
+								<ul className=" navigation-box one-page-scroll-menu ">
+									<li className="current scrollToLink">
+										<a href="/">Inicio</a>
+									</li>
+									<li className="scrollToLink">
+										<a href="/">¿Como funciona?</a>
+									</li>
+									<li className="scrollToLink">
+										<a href="/auctions">Subastas</a>
+									</li>
+									<li className="scrollToLink">
+										<a href="/">Tokens</a>
+									</li>
+								</ul>
+						</div>
+
+						<div className="right-side-box">
+							<button className="thm-btn header-one__btn" onClick={() => this.sessionAction() } >
+								{this.state.sessionMessage}
+							</button>
+						</div>
+
+					</div>
+
+				</nav>
+			</header>
+		)
+	}
 }
 
-const Header = withRouter(withFirebase(HeaderForm));
+const Header = compose(
+	withRouter,
+	withFirebase,
+)(HeaderBase);
 export default Header;

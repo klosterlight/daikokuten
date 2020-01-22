@@ -1,0 +1,36 @@
+.link-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  /* text-decoration: underline; */
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.link-button:hover,
+.link-button:focus {
+text-decoration: none;
+}
+
+.disabled {
+	opacity: 0.5;
+}
+
+.odometer-inside:before {
+	content: "$";
+}
+
+.sidebar__single:not(.sidebar__search) {
+	padding: 40px !important;
+}
+
+.comment-one {
+	margin-bottom: 2em;
+}
+
+.chatx-endline {
+	overflow-y: scroll;
+	height: 50vh;
+	margin-bottom: 2em;
+}
