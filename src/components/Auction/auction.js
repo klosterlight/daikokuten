@@ -214,9 +214,12 @@ class AuctionBase extends React.Component {
 	}
 
 	buyEntry = () => {
-		this.props.firebase.buyEntry(this.state.id);
-		this.setState({
-			bought: true
+		this.props.firebase.buyEntry(this.state.id).then((response) => {
+			this.setState({
+				bought: true
+			});
+		}).catch((error) => {
+			console.log(error);
 		});
 	}
 

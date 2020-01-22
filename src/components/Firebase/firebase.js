@@ -3,6 +3,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
 import 'firebase/storage';
+import moment from "moment";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyALHT9heGbzKAfPPGsXLcAYhvoyeNypbjc",
@@ -76,8 +77,39 @@ class Firebase {
 
 	buyEntry = (auctionId) => {
 		let auctionRef = this.firestore.collection("auctions").doc(auctionId);
-		return auctionRef.update({
-			entries: app.firestore.FieldValue.arrayUnion(this.user.uid)
+		let userRef = this.firestore.collection("users").doc(this.user.uid);
+
+		return this.firestore.runTransaction((transaction) => {
+			return transaction.get(auctionRef).then((auction) => {
+				if(!auction.exists) {
+					throw "Auction does not exist!";
+				}
+
+				return transaction.get(userRef).then((user) => {
+					if(!user.exists) {
+						throw "User does not exist!";
+					}
+
+					const userData = user.data();
+					const auctionData = auction.data();
+					const userTokens = parseInt(userData.tokens);
+					const auctionTokens = parseInt(auctionData.tokens);
+					const now = moment();
+					const auctionEndsAt = moment.unix(auctionData.endingAt.seconds);
+					if(userTokens < auctionTokens) {
+						throw "User does not have enough tokens to buy access to auction!";
+					}
+					if(now.diff(auctionEndsAt) > 0) {
+						throw "The auction has ended!";
+					}
+					if(auctionData.entries.includes(this.user.uid)) {
+						throw "The user has already bought this auction!";
+					}
+
+					transaction.update(userRef, { tokens: userTokens - auctionTokens });
+					transaction.update(auctionRef, { entries: app.firestore.FieldValue.arrayUnion(this.user.uid)});
+				});
+			});
 		});
 	}
 
