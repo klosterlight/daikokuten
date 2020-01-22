@@ -78,6 +78,7 @@ class Firebase {
 	buyEntry = (auctionId) => {
 		let auctionRef = this.firestore.collection("auctions").doc(auctionId);
 		let userRef = this.firestore.collection("users").doc(this.user.uid);
+		let userBuysRef = this.firestore.collection("userBuys").doc();
 
 		return this.firestore.runTransaction((transaction) => {
 			return transaction.get(auctionRef).then((auction) => {
@@ -108,6 +109,13 @@ class Firebase {
 
 					transaction.update(userRef, { tokens: userTokens - auctionTokens });
 					transaction.update(auctionRef, { entries: app.firestore.FieldValue.arrayUnion(this.user.uid)});
+					transaction.set(userBuysRef, {
+						userId: this.user.uid,
+						auctionId: auctionId,
+						boughtAt: app.firestore.FieldValue.serverTimestamp(),
+						displayName: this.user.displayName,
+						email: this.user.email
+					});
 				});
 			});
 		});
@@ -120,10 +128,13 @@ class Firebase {
 			bids: app.firestore.FieldValue.arrayUnion(this.user.uid)
 		});
 
+		console.log(this.user);
 		this.firestore.collection("userBids").add({
 			userId: this.user.uid,
 			auctionId: auctionId,
-			bidAt: app.firestore.FieldValue.serverTimestamp()
+			bidAt: app.firestore.FieldValue.serverTimestamp(),
+			displayName: this.user.displayName,
+			email: this.user.email
 		});
 	}
 
@@ -149,8 +160,13 @@ class Firebase {
 	getAuctionBidUsers = (auctionId) => {
 		return this.firestore.collection("userBids")
 			.where("auctionId", "==", auctionId)
-			.orderBy("bidAt", "desc")
-			.get();
+			.orderBy("bidAt", "desc");
+	}
+
+	getAuctionBoughtUsers = (auctionId) => {
+		return this.firestore.collection("userBuys")
+			.where("auctionId", "==", auctionId)
+			.orderBy("boughtAt", "desc");
 	}
 
 	uploadFile = (fileName, blob) => {

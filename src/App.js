@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import { LogIn, Landing, NotFound } from "./components/Common";
 import Room, { Rooms } from "components/Room";
 import Auctions, { Auction } from "components/Auction";
-import Dashboard, { CreateAuction } from "components/Admin";
+import Dashboard, { CreateAuction, AdminAuctions, AdminAuction } from "components/Admin";
 import { withFirebase } from 'components/Firebase';
 import * as ROUTES from 'constants/routes';
 
@@ -13,7 +13,9 @@ class AppForm extends React.Component {
 			<Router>
 				<Switch>
 					<Route path={ROUTES.CREATE_AUCTION} component={CreateAuction} />
-					<Route path={ROUTES.ADMIN_DASHBOARD} component={Dashboard} />
+					<Route exact path={ROUTES.ADMIN_DASHBOARD} component={Dashboard} />
+					<Route path={ROUTES.ADMIN_AUCTIONS} component={AdminAuctions} />
+					<Route path={ROUTES.ADMIN_AUCTION} component={AdminAuction} />
 
 					<Route path={ROUTES.ROOM} component={Room} />
 					<Route path={ROUTES.ROOMS} component={Rooms} />

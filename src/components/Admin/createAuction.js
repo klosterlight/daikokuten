@@ -89,7 +89,7 @@ class CreateAuctionComponent extends React.Component {
 								<a href="/" className="thm-breadcrumb__link">Inicio</a>
 							</li>
 							<li className="thm-breadcrumb__item">
-								<a href="/admin/dashboard" className="thm-breadcrumb__link">Admin</a>
+								<a href="/admin" className="thm-breadcrumb__link">Admin</a>
 							</li>
 							<li className="thm-breadcrumb__item current">
 								<button className="thm-breadcrumb__link link-button">Subastas</button>
